@@ -1,6 +1,12 @@
 'use strict';
 const jwt = require('jsonwebtoken');
 
+/**
+ * @desc TOKEN校验中间件
+ * @author padipata
+ * @date 2018/7/13
+ */
+
 // 是否已经登录
 const isLogin = async function (next) {
     const token = this.request.header.authorization;

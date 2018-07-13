@@ -23,9 +23,19 @@ module.exports = appInfo => {
         test: 'tst',
     };
 
+    // PostgresSQL
+    config.sequelize = {
+        dialect: 'postgres',//db类型
+        database: 'egg',//数据库名
+        host: 'localhost',//主机
+        port: '5432',//端口
+        username: 'root',
+        password: 'xiaoh0.0',
+    };
+
     //异常捕获路由
     config.errorHandler = {
-        match: '/api/v1',
+        match: '/api/v2',
     };
 
     // 关闭安全威胁csrf的防范

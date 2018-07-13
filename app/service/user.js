@@ -1,18 +1,43 @@
 'use strict';
-const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
 
-module.exports = app => {
-    class UserService extends app.Service {
-        // 获取用户信息
-        async getUserById(userId) {
-            const user = await app.model.User.findOne({userId}, '-_id -password -__v');
-            if (user) {
-                return user;
-            }
-            throw new Error('用户不存在');
-        }
+const Service = require('egg').Service;
+
+class User extends Service {
+    async list({offset = 0, limit = 10, order_by = 'created_at', order = 'ASC'}) {
+        return this.ctx.model.User.findAndCountAll({
+            offset,
+            limit,
+            order: [[order_by, order.toUpperCase()]],
+        });
     }
 
-    return UserService;
-};
+    async find(id) {
+        const user = await this.ctx.model.User.findById(id);
+        if (!user) {
+            this.ctx.throw(404, '用户不存在');
+        }
+        return user;
+    }
+
+    async create(user) {
+        return this.ctx.model.User.create(user);
+    }
+
+    async update({id, updates}) {
+        const user = await this.ctx.model.User.findById(id);
+        if (!user) {
+            this.ctx.throw(404, '用户不存在');
+        }
+        return user.update(updates);
+    }
+
+    async del(id) {
+        const user = await this.ctx.model.User.findById(id);
+        if (!user) {
+            this.ctx.throw(404, '用户不存在');
+        }
+        return user.destroy();
+    }
+}
+
+module.exports = User;
