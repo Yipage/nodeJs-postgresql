@@ -6,8 +6,6 @@ const jwt = require('jsonwebtoken');
  * @author padipata
  * @date 2018/7/13
  */
-
-// 是否已经登录
 const isLogin = async function (next) {
     const token = this.request.header.authorization;
     if (!token) {
@@ -17,14 +15,14 @@ const isLogin = async function (next) {
     }
     // 验证token是否过期
     try {
-        const info = jwt.verify(token.split('Bearer ')[1], this.app.config.jwtSecret);
+        const info = jwt.verify(token.split('Bearer_')[1], this.app.config.jwtSecret);
         const exp = info.exp; // 过期时间
         const now = parseInt(new Date().getTime() / 1000);
         // 有效期小于一小时的重新赋值token
         const isOver = exp - now < 60 * 60;
         if (isOver) {
             const token = jwt.sign({uuId: info.uuId}, this.app.config.jwtSecret, {expiresIn: '7d'});
-            this.set('authorization', 'Bearer ' + token);
+            this.set('authorization', 'Bearer_' + token);
         }
     } catch (err) {
         this.response.status = 401;

@@ -6,24 +6,6 @@ const jwt = require('jsonwebtoken');
 
 module.exports = app => {
     class User extends app.Service {
-        // 获取用户列表
-        async list({offset = 0, limit = 10, order_by = 'created_at', order = 'ASC'}) {
-            return this.ctx.model.User.findAndCountAll({
-                offset,
-                limit,
-                order: [[order_by, order.toUpperCase()]],
-            });
-        }
-
-        // 获取用户信息
-        async find(user_id) {
-            const user = await this.ctx.model.User.findById(user_id);
-            if (!user) {
-                this.ctx.throw(404, '用户不存在');
-            }
-            return user;
-        }
-
         // 注册
         async register(user) {
             if (await this.hasRegister(user.name)) {
@@ -36,15 +18,36 @@ module.exports = app => {
         // 登录
         async login(user) {
             user.password = crypto.createHash('md5').update(user.password).digest('hex');
-            if (await this.checkUser(user.name, user.password) !== false) {
-                const user_id = await this.checkUser(user.name, user.password);
+            const user_id = await this.checkUser(user.name, user.password);
+            if (user_id !== false) {
                 const token = jwt.sign({user_id: user_id}, this.app.config.jwtSecret, {expiresIn: '7d'});
-                this.ctx.set('authorization', 'Bearer ' + token);
-                return `Bearer ${token}`;
+                this.ctx.set('authorization', 'Bearer_' + token);
+                return `Bearer_${token}`;
             }
             this.ctx.throw(404, '用户名或密码错误');
         }
 
+        // 获取用户列表
+        async list({offset = 0, limit = 10, order_by = 'created_at', order = 'ASC'}) {
+            const users = await this.ctx.model.User.findAndCountAll({
+                offset,
+                limit,
+                order: [[order_by, order.toUpperCase()]],
+            });
+            if (!users || users.length === 0) {
+                this.ctx.throw(404, '暂无用户');
+            }
+            return users;
+        }
+
+        // 获取用户信息
+        async find(user_id) {
+            const user = await this.ctx.model.User.findById(user_id);
+            if (!user) {
+                this.ctx.throw(404, '用户不存在');
+            }
+            return user;
+        }
 
         // 更新用户信息
         async update({id, updates}) {
@@ -85,8 +88,7 @@ module.exports = app => {
             return false;
         }
 
-
     }
 
     return User;
-}
+};

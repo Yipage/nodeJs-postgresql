@@ -16,7 +16,7 @@ module.exports = app => {
                 // 生成token
                 const token = jwt.sign({userId: openId}, app.config.jwtSecret, {expiresIn: '7d'});
                 this.ctx.body = token;
-                this.ctx.set('authorization', 'Bearer ' + token);
+                this.ctx.set('authorization', 'Bearer_' + token);
             } else {
                 this.ctx.body = '获取openId失败';
             }
