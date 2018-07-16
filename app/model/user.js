@@ -4,13 +4,14 @@ module.exports = app => {
     const {STRING, INTEGER, DATE} = app.Sequelize;
 
     const User = app.model.define('user', {
-        id: {
+        user_id: {
             type: INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
         name: STRING(30),
-        age: INTEGER,
+        password: STRING(255),
+        age: {type: INTEGER, defaultValue: 0},
         sex: {type: STRING(2), defaultValue: '男'},
         created_at: DATE,
         updated_at: DATE,
