@@ -18,7 +18,7 @@
 
 ```bash
 $ npm install
-$ createdb example-dev --owner postgres
+$ createdb example-dev --owner root //使用 root 用户创建一个 example-dev 数据库
 $ npm run migrate:up
 $ npm run dev
 $ open http://localhost:7001/users

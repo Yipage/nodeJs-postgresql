@@ -4,7 +4,7 @@ module.exports = appInfo => {
     const config = {};
 
     // use for cookie sign key, should change to your own and keep security
-    config.keys = appInfo.name + '_1516418387158_7965';
+    config.keys = appInfo.name + '_padipata';
 
     // 部署环境
     config.domain = 'http://127.0.0.1:7001';
@@ -14,7 +14,7 @@ module.exports = appInfo => {
     config.appSecret = '121dd6705a31acf18eb489ae9b8380aa';
 
     // token凭证
-    config.jwtSecret = 'yipage';
+    config.jwtSecret = 'padipata';
 
     // 使用koa的中间件
     config.middleware = ['errorHandler'];
@@ -26,7 +26,7 @@ module.exports = appInfo => {
     // PostgresSQL
     config.sequelize = {
         dialect: 'postgres',//db类型
-        database: 'egg',//数据库名
+        database: 'postgres',//数据库名
         host: 'localhost',//主机
         port: '5432',//端口
         username: 'root',

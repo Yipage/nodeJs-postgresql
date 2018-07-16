@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = app => {
-    const { STRING, INTEGER, DATE } = app.Sequelize;
+    const {STRING, INTEGER, DATE} = app.Sequelize;
 
     const User = app.model.define('user', {
         id: {
@@ -11,13 +11,14 @@ module.exports = app => {
         },
         name: STRING(30),
         age: INTEGER,
+        sex: {type: STRING(2), defaultValue: '男'},
         created_at: DATE,
         updated_at: DATE,
     });
 
-    User.prototype.associate = function() {
-        app.model.User.hasMany(app.model.Post, { as: 'posts', foreignKey: 'user_id' });
-    };
+    // User.prototype.associate = function() {
+    //     app.model.User.hasMany(app.model.Post, { as: 'posts', foreignKey: 'user_id' });
+    // };
 
     return User;
 };
